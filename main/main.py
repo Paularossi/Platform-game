@@ -103,10 +103,10 @@ class MyGame(arcade.Window):
         self.map_height = self.tile_map.height * GRID_PIXEL_SIZE # top of map    
 
         # # Set the window size to match the size of the map
-        # self.set_size(map_width_pixels, map_height_pixels)
+        # self.set_size(map_width, map_height)
 
         # # Set the boundaries for the camera
-        # self.set_viewport(0, map_width_pixels, 0, map_height_pixels)
+        # self.set_viewport(0, map_width, 0, map_height)
 
         if self.tile_map.background_color:
             arcade.set_background_color(self.tile_map.background_color)
@@ -171,38 +171,17 @@ class MyGame(arcade.Window):
             self.player_sprite.change_x = 0
 
     def center_camera_to_player(self):
-        # Find where player is, then calculate lower left corner from that
-        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
-        screen_center_y = self.player_sprite.center_y - (self.camera.viewport_height / 2)
-
-        # Set some limits on how far we scroll
-        if screen_center_x < 0:
-            screen_center_x = 0
-        if screen_center_y < 0:
-            screen_center_y = 0
-
-        # Here's our center, move to it
-        player_centered = screen_center_x, screen_center_y
-        self.camera.move_to(player_centered)
-        """     # Find where the player is
-        player_center_x = self.player_sprite.center_x
-        player_center_y = self.player_sprite.center_y
-
-        # Get the dimensions of the map
-        map_width = self.tile_map.width * GRID_PIXEL_SIZE
-        map_height = self.tile_map.height * GRID_PIXEL_SIZE
-
-        # Get the dimensions of the window
-        window_width = self.width
-        window_height = self.height
-
         # Calculate the left and right boundaries of the camera
-        left_boundary = window_width // 2
-        right_boundary = map_width - window_width // 2
+        left_boundary = self.camera.viewport_width // 2
+        right_boundary = self.map_width - self.camera.viewport_width // 2
 
         # Calculate the bottom and top boundaries of the camera
-        bottom_boundary = window_height // 2
-        top_boundary = map_height - window_height // 2
+        bottom_boundary = self.camera.viewport_height // 2
+        top_boundary = self.map_height - self.camera.viewport_height // 2
+
+        # Find where the player is
+        player_center_x = self.player_sprite.center_x
+        player_center_y = self.player_sprite.center_y
 
         # Calculate the new camera center
         camera_center_x = min(max(player_center_x, left_boundary), right_boundary)
@@ -210,7 +189,7 @@ class MyGame(arcade.Window):
 
         # Set the new camera center
         self.camera.center_x = camera_center_x
-        self.camera.center_y = camera_center_y """
+        self.camera.center_y = camera_center_y
  
     def on_update(self, delta_time):
         """Movement and game logic"""
